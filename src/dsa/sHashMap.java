@@ -1,11 +1,11 @@
 package dsa;
 
 public class sHashMap <K, V>{
-    public  class Pair{
-        K key;
-        V value;
+    public  class Pair <J , L>{
+        J key;
+        L value;
 
-        public Pair(K key, V value){
+        public Pair(J key, L value){
             this.key = key;
             this.value = value;
         }
@@ -14,7 +14,7 @@ public class sHashMap <K, V>{
 
     public sHashMap(){
         for(int i = 0; i < 15; i++){
-            buckets[i] = new sLinkedList<Pair>();
+            buckets[i] = new sLinkedList();
         }
     }
 
@@ -32,7 +32,12 @@ public class sHashMap <K, V>{
         buckets[index].add(new Pair(key, value));
     }
 
-    public V get(K key){
+    public void put(K key){
+        int index = hashFunction(key);
+        buckets[index].add(new Pair(key, key));
+    }
+
+    public Object get(K key){
         int index = hashFunction(key);
         sLinkedList.Node node = buckets[index].head;
         while (node != null){
@@ -43,4 +48,17 @@ public class sHashMap <K, V>{
         }
         return null;
     }
+
+    public void remove(K key){
+        int index = hashFunction(key);
+        sLinkedList.Node node = buckets[index].head;
+        while (node != null){
+            if(((Pair)(node.data)).key.equals(key)){
+                buckets[index].remove(node);
+            }
+            node = node.next;
+        }
+    }
+
+    public sLinkedList makeValue()
 }
