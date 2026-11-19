@@ -25,11 +25,19 @@ public class sLinkedList  {
     }
 
     public void print(){
+        if (head == null){
+            System.out.println("KOSONG");
+            return;
+        }
         Node curr =  head;
         while (curr != null) {
             System.out.println(curr.data);
             curr = curr.next;
         }
+    }
+
+    public boolean isEmpty(){
+        return head == null;
     }
 
     public void remove(Object value){

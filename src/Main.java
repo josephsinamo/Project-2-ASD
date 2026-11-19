@@ -9,7 +9,16 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        
+        sHashMap <String, String> map= new sHashMap<>();
+        map.put("abc","1");
+        map.put("acb","2");
+        map.put("cba","3");
+
+        System.out.println(map.get("abc"));
+        System.out.println(map.get("cba"));
+
+        sLinkedList tes = map.makeValueList();
+        tes.print();
     }
 
     public void inisialisasi(sLinkedList list) throws Exception{

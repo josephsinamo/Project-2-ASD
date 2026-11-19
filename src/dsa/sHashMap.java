@@ -10,10 +10,12 @@ public class sHashMap <K, V>{
             this.value = value;
         }
     }
-    private sLinkedList [] buckets = new sLinkedList[15];
+    private int size = 15;
+    
+    private sLinkedList [] buckets = new sLinkedList[size];
 
     public sHashMap(){
-        for(int i = 0; i < 15; i++){
+        for(int i = 0; i < size; i++){
             buckets[i] = new sLinkedList();
         }
     }
@@ -24,7 +26,7 @@ public class sHashMap <K, V>{
         for(int i = 0; i<s.length(); i++){
             nums += s.charAt(i);
         }
-        return nums%15;
+        return nums%size;
     }
 
     public void put(K key, V value){
@@ -60,5 +62,20 @@ public class sHashMap <K, V>{
         }
     }
 
-    public sLinkedList makeValue()
+    public sLinkedList makeValueList(){
+        sLinkedList listValue = new sLinkedList();
+        for(sLinkedList list : buckets){
+            if(!list.isEmpty()){
+                // list.print();
+                sLinkedList.Node node = list.head;
+                while (node != null){
+                    // System.out.println(((Pair)node.data).value+" "+(((Pair)(node.data)).value).getClass());
+                    // ((sLinkedList)((Pair)(node.data)).value).print();
+                    listValue.add(((Pair)node.data).value);
+                    node = node.next;
+                }
+            }
+        }
+        return listValue;
+    }
 }
