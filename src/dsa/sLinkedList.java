@@ -1,8 +1,12 @@
 package dsa;
 
-public class sLinkedList <T> {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class sLinkedList <T> implements Iterable<T>{
 
     public Node head,tail;
+    private int size = 0;
 
     public class Node{
         public T data;
@@ -39,6 +43,8 @@ public class sLinkedList <T> {
             tail.next = node;
             tail = node;
         }
+
+        size++;
     }
 
     public void print(){
@@ -51,6 +57,25 @@ public class sLinkedList <T> {
             System.out.println(curr.data);
             curr = curr.next;
         }
+    }
+
+    @Override 
+    public String toString(){
+        if (head == null){
+            return null;
+        }
+
+        Node curr =  head;
+        String s = "";
+        while (curr != null) {
+            s += curr.data;
+            if (curr != tail){
+                s += ", ";
+            } 
+            curr = curr.next;
+        }
+
+        return s;
     }
 
     public boolean isEmpty(){
@@ -75,6 +100,10 @@ public class sLinkedList <T> {
         }
     }
 
+    public int getSize(){
+        return size;
+    }
+
     public void remove(Node value){
         Node curr = head;
         Node prev = null;
@@ -97,4 +126,30 @@ public class sLinkedList <T> {
     public void removeTail(){
         this.remove(tail);
     }
+
+    @Override 
+    public Iterator<T> iterator(){
+        return new ListIterator();
+    }
+
+    private class ListIterator implements Iterator<T>{
+        private Node node = head;
+        @Override
+        public boolean hasNext() {
+            return node != null;
+        }
+
+        @Override
+        public T next() {
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }    
+
+            T data = node.data;
+            node = node.next;
+            return data;
+        }
+        
+    }
+
 }

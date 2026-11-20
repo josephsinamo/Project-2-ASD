@@ -1,5 +1,7 @@
 package dsa;
 
+import java.util.Iterator;
+
 public class sHashMap <K, V>{
     public  class Pair {
         K key;
@@ -23,11 +25,14 @@ public class sHashMap <K, V>{
             return String.format("(key : %s   -- value : %s)",key,value);
         }
     }
-    private int size;
+    private int size, length;
     private sLinkedList [] buckets;
+    private sLinkedList <K> keySet;
 
     public sHashMap(){
         size = 15;
+        length = 0;
+        keySet = new sLinkedList<>();
         buckets = new sLinkedList[size];
         for(int i = 0; i < size; i++){
             buckets[i] = new sLinkedList();
@@ -36,6 +41,10 @@ public class sHashMap <K, V>{
 
     public int getInt(){
         return size;
+    }
+
+    public int getLength(){
+        return length;
     }
 
     public sLinkedList [] getList(){
@@ -54,11 +63,15 @@ public class sHashMap <K, V>{
     public void put(K key, V value){
         int index = hashFunction(key);
         buckets[index].add(new Pair(key, value));
+        keySet.add(key);
+        length++;
     }
 
     public void put(K key){
         int index = hashFunction(key);
         buckets[index].add(new Pair(key, (V)key));
+        keySet.add(key);
+        length++;
     }
 
     public V get(K key){
@@ -73,12 +86,17 @@ public class sHashMap <K, V>{
         return null;
     }
 
+    public sLinkedList<K> keySet(){
+        return keySet;
+    }
+
     public void remove(K key){
         int index = hashFunction(key);
         sLinkedList.Node node = buckets[index].head;
         while (node != null){
             if(((Pair)(node.data)).key.equals(key)){
                 buckets[index].remove(node);
+                keySet.remove(key);;
                 return;
             }
             node = node.next;

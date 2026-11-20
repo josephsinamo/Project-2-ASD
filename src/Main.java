@@ -13,37 +13,49 @@ public class Main {
         Mahasiswa [] mhs = Mahasiswa.makeMhs("input");
         for(Mahasiswa m: mhs){
             sLinkedList <sTree>.Node node = list.getHead();
+            boolean stat = true;
             while (node != null) {
                 sTree tree = node.getData();
-                req(m, tree, true, new sLinkedList<Matakuliah>());
+                stat = stat && req(m, tree, true, new sLinkedList<Matakuliah>());
                 node = node.next;
+            }
+
+            if (stat){
+                m.addMk(new Matakuliah(new String("SKR;Skripsi;6;8;Keduanya").split(";")));
             }
 
             m.printKRS();
         }
     }
 
-    public static void req(Mahasiswa mhs, sTree tree, boolean sParent, 
+    public static boolean req(Mahasiswa mhs, sTree tree, boolean sParent, 
         sLinkedList <Matakuliah> listBlmLulus)
     {
-        Matakuliah bufMatkul = (Matakuliah)tree.getData(); 
+        Matakuliah bufMatkul = (Matakuliah)tree.getData();
+        boolean wajib = true;
         
-        if (bufMatkul.canTake(mhs.getTgrSem()) && sParent){
-            //System.out.printf("nama Matkul: %s -- apa Lulus parent: %s -- lulus self: %s\n",bufMatkul,status,mhs.isLulus(bufMatkul.getKode()));
+        boolean canTakeMk = bufMatkul.canTake(mhs.getTgrSem());
+        if (canTakeMk && sParent){
             mhs.addMk(bufMatkul);
-        }else{
-            mhs.addBlmMk(bufMatkul, listBlmLulus);
+        }else if(canTakeMk && !sParent){
+            mhs.addBlmMk(bufMatkul, listBlmLulus.toString());
+        }else if(!sParent){
+            wajib = false;
         }
         
         boolean status = mhs.isLulus(bufMatkul.getKode());
+        
         if (!status){
             listBlmLulus.add(bufMatkul);
         }
         sLinkedList <sTree>.Node child = tree.getChild().getHead();
         while (child != null){
-            req(mhs, child.getData(), status, listBlmLulus);
+            wajib = wajib && req(mhs, child.getData(), status, listBlmLulus);
             child = child.next;
         }
+        
+        listBlmLulus.removeTail();
+        return wajib;
     }
 
     public static sLinkedList <sTree> inisialisasi(String pathMatakuliah, String pathPrasyarat) throws Exception{
@@ -66,9 +78,9 @@ public class Main {
             while(n != null){
                 Node next = n.next;
                 Pair pair= (Pair)n.data;
-                // System.out.println(n);
+                
                 sTree tes = ((sTree)pair.getValue());
-                // System.out.println(tes.getData() +"  "+tes.getIsRoot());
+                
                 if (!((sTree)pair.getValue()).getIsRoot()){
                     mapMataKuliah.remove((String)pair.getKey());
                 }

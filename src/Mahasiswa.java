@@ -10,7 +10,7 @@ public class Mahasiswa {
     private sHashMap<String, String> mkLulus;
     private String tgrSem;
     private sLinkedList<Matakuliah> ambilMk;
-    private sLinkedList<Matakuliah> belumMk;
+    private sHashMap <Matakuliah,String> belumMk;
 
     public Mahasiswa(String pathInput) throws FileNotFoundException{
         this(new File(pathInput)); 
@@ -29,7 +29,7 @@ public class Mahasiswa {
         }
 
         ambilMk = new sLinkedList<>();
-        belumMk = new sLinkedList<>();
+        belumMk = new sHashMap<>();
         scan.close();
     }
 
@@ -37,8 +37,8 @@ public class Mahasiswa {
         ambilMk.add(mk);
     }
 
-    public void addBlmMk(Matakuliah mk, sLinkedList list){
-        belumMk.add(mk);
+    public void addBlmMk(Matakuliah mk, String p){
+        belumMk.put(mk,p);
     }
 
     public boolean isLulus(String kodeMK){
@@ -73,7 +73,17 @@ public class Mahasiswa {
     }
 
     public void printKRS(){
-        System.out.printf("Nama : %s\n",nama);
-        ambilMk.print();
+        System.out.printf("\n\n==========================\nNama : %s\n==========================\n",nama);
+        System.out.println("Mk yang bisa di Ambil");
+        int count = 1;
+        for(Matakuliah mk : ambilMk){
+            System.out.printf("%3d. %s\n",count++,mk.printDetail());
+        }
+
+        System.out.println("\nBelum Bisa di Ambil :");
+        sLinkedList<Matakuliah> keySet = belumMk.keySet();
+        for(Matakuliah mk : keySet){
+            System.out.printf(" --> %s: belum lulus %s\n",mk.getKode(), belumMk.get(mk));
+        }
     }
 }

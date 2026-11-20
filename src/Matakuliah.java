@@ -60,6 +60,10 @@ public class Matakuliah {
 
   @Override 
   public String toString(){
-    return String.format("<Matkul.kode MK: %s>", kode);
+    return String.format(kode);
+  }
+
+  public String printDetail(){
+    return  String.format("%-5s  %-50s  %dsks", kode,nama,sks);
   }
 }
