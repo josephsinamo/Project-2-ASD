@@ -1,82 +1,111 @@
-import dsa.sHashMap;
-import dsa.sLinkedList;
-import dsa.sTree;
-import dsa.sHashMap.Pair;
-import dsa.sLinkedList.Node;
+import DataStructures.*;
+import Entity.*;
+
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        String pathDataMatakuliah = "data/matakuliah.csv";
-        String pathDataPrasyarat = "data/prasyarat.csv";
-        sLinkedList <sTree> list = inisialisasi(pathDataMatakuliah, pathDataPrasyarat);
+  public static void main (String args[]) throws IOException {
+    Graph graph = new Graph();
+    
+    loadCourse("data/matakuliah.csv", graph);
+    loadPrereq("data/prasyarat.csv", graph);
 
-        Mahasiswa [] mhs = Mahasiswa.makeMhs("input");
-        for(Mahasiswa m: mhs){
-            sLinkedList <sTree>.Node node = list.getHead();
-            while (node != null) {
-                sTree tree = node.getData();
-                req(m, tree, true, new sLinkedList<Matakuliah>());
-                node = node.next;
-            }
+    // LinkedList<Course> courses = graph.getAllCourse();
+    // courses.display();
+    // System.out.println("size = " + courses.getSize());
 
-            m.printKRS();
-        }
+    String nextSemester = "genap";
+    HashMap<Boolean> lulus = new HashMap<>();
+    lulus.put("RPL", true);
+    lulus.put("PDAS", true);
+    lulus.put("PKK", true);
+    lulus.put("AOK", true);
+    lulus.put("KAL", true);
+    lulus.put("STP", true);
+    lulus.put("AGM", true);
+
+    LinkedList<Course> canBeTaken = new LinkedList<>();
+    LinkedList<BlockedCourse> cantBeTaken = new LinkedList<>();
+
+    for (Node<Course> node =  graph.getAllCourse().head; node != null; node = node.next) {
+      Course c = node.data;
+
+      if (lulus.contains(c.getCode())) {
+        continue;
+      }
+
+      if (! c.periode.equalsIgnoreCase(nextSemester)) {
+        continue;
+      }
+
+      LinkedList<Course> missing = graph.getMissingPrerequisites(c, lulus);
+      if (missing.isEmpty()) {
+        canBeTaken.addLast(c);
+      } else {
+        cantBeTaken.addLast(new BlockedCourse(c, missing));
+      }
     }
 
-    public static void req(Mahasiswa mhs, sTree tree, boolean sParent, 
-        sLinkedList <Matakuliah> listBlmLulus)
-    {
-        Matakuliah bufMatkul = (Matakuliah)tree.getData(); 
-        
-        if (bufMatkul.canTake(mhs.getTgrSem()) && sParent){
-            //System.out.printf("nama Matkul: %s -- apa Lulus parent: %s -- lulus self: %s\n",bufMatkul,status,mhs.isLulus(bufMatkul.getKode()));
-            mhs.addMk(bufMatkul);
-        }else{
-            mhs.addBlmMk(bufMatkul, listBlmLulus);
-        }
-        
-        boolean status = mhs.isLulus(bufMatkul.getKode());
-        if (!status){
-            listBlmLulus.add(bufMatkul);
-        }
-        sLinkedList <sTree>.Node child = tree.getChild().getHead();
-        while (child != null){
-            req(mhs, child.getData(), status, listBlmLulus);
-            child = child.next;
-        }
+
+    System.out.println("Yang bisa diambil:");
+    for (Node<Course> node = canBeTaken.head; node != null; node = node.next) {
+      System.out.println(node.data);
     }
 
-    public static sLinkedList <sTree> inisialisasi(String pathMatakuliah, String pathPrasyarat) throws Exception{
-        sLinkedList <sTree> list = new sLinkedList<>();
-        sHashMap <String, sTree> mapMataKuliah = Matakuliah.makeMataKuliah(pathMatakuliah);
-        sLinkedList <Prasyarat> listPraSyarat = Prasyarat.makePrasyarat(pathPrasyarat);
+    System.out.println("\n");
+    
+    System.out.println("Yang tidak bisa diambil:");
+    for (Node<BlockedCourse> node = cantBeTaken.head; node != null; node = node.next) {
+      BlockedCourse bc = node.data;
 
-        sLinkedList<Prasyarat>.Node  node = listPraSyarat.getHead();
-        while(node != null){
-            Prasyarat prasyarat = node.getData();
-            sTree root = mapMataKuliah.get(prasyarat.getPraSyarat());
-            sTree child = mapMataKuliah.get(prasyarat.getKodeMk());
-            root.add(child);
+      System.out.print(bc.course + " Karena: ");
 
-            node = node.next;
-        }
-
-        for(sLinkedList <sTree> l : mapMataKuliah.getList()){
-            Node n = l.getHead();
-            while(n != null){
-                Node next = n.next;
-                Pair pair= (Pair)n.data;
-                // System.out.println(n);
-                sTree tes = ((sTree)pair.getValue());
-                // System.out.println(tes.getData() +"  "+tes.getIsRoot());
-                if (!((sTree)pair.getValue()).getIsRoot()){
-                    mapMataKuliah.remove((String)pair.getKey());
-                }
-                n = next;
-            }
-        }
-        
-        list = mapMataKuliah.makeValueList();
-        return list;
+      for (Node<Course> nodeCourse = bc.missingPrereq.head; nodeCourse != null; nodeCourse = nodeCourse.next) {
+        System.out.print(nodeCourse.data + " ");
+      }
+      System.out.println();
     }
+  }
+
+  private static void loadCourse (String path, Graph graph) throws IOException {
+    try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+      br.readLine();
+
+      String line;
+      while ((line = br.readLine()) != null) {
+        if (line.trim().isEmpty()) {
+          continue;
+        }
+
+        String[] parts = line.split(";");
+        String code = parts[0].trim();
+        String name = parts[1].trim();
+        int sks = Integer.parseInt(parts[2].trim());
+        int semester = Integer.parseInt(parts[3].trim());
+        String periode = parts[4].trim();
+
+        Course course = new Course(code, name, sks, semester, periode);
+        graph.addCourse(course);
+      }
+    }
+  }
+
+  private static void loadPrereq (String path, Graph graph) throws IOException {
+    try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+      br.readLine();
+
+      String line;
+      while ((line = br.readLine()) != null) {
+        if (line.trim().isEmpty()) {
+          continue;
+        }
+
+        String[] parts = line.split(";");
+        String prereqCode = parts[0].trim();
+        String targetCode = parts[1].trim();
+
+        graph.addPrereq(prereqCode, targetCode);
+      }
+    }
+  }
 }

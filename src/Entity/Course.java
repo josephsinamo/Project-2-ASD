@@ -1,0 +1,33 @@
+package Entity;
+import DataStructures.LinkedList;
+
+public class Course {
+  private String code;
+  private String nama;
+  private int sks;
+  private int semester;
+  public String periode;
+  public LinkedList<Course> prereq;
+
+  public Course (String kode, String nama, int sks, int semester, String isGanjil) {
+    this.code = kode;
+    this.nama = nama;
+    this.sks = sks;
+    this.semester = semester;
+    this.periode = isGanjil;
+    this.prereq = new LinkedList<>();
+  }
+
+  public String getCode () {
+    return code;
+  }
+
+  public void cetak(){
+    System.out.println("nama saya:"+nama+"   kode:"+code);
+  }
+
+  @Override 
+  public String toString(){
+    return String.format("<Matkul.kode MK: %s>", code);
+  }
+}
