@@ -1,19 +1,36 @@
 package dsa;
 
-public class sLinkedList  {
-
-    public class Node{
-        Object data;
-        Node next;
-
-        public Node(Object data){
-            this.data = data;
-        }
-    }
+public class sLinkedList <T> {
 
     public Node head,tail;
 
-    public void add(Object value){
+    public class Node{
+        public T data;
+        public Node next;
+
+        public Node(T data){
+            this.data = data;
+        }
+
+        public T getData(){
+            return data;
+        }
+
+        @Override 
+        public String toString(){
+            return String.format("[LS data: %s]", data);
+        }
+    }
+
+    public T getData(Node node){
+        return node.getData();
+    }
+
+    public Node getHead(){
+        return head;
+    }
+
+    public void add(T value){
         Node node = new Node(value);
 
         if(head == null){
@@ -40,7 +57,7 @@ public class sLinkedList  {
         return head == null;
     }
 
-    public void remove(Object value){
+    public void remove(T value){
         Node curr = head;
         Node prev = null;
         while (curr != null) {

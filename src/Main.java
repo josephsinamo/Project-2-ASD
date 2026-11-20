@@ -1,56 +1,47 @@
-import java.util.*;
-
 import dsa.sHashMap;
 import dsa.sLinkedList;
 import dsa.sTree;
-
-import java.io.*;
-
+import dsa.sHashMap.Pair;
+import dsa.sLinkedList.Node;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        sHashMap <String, String> map= new sHashMap<>();
-        map.put("abc","1");
-        map.put("acb","2");
-        map.put("cba","3");
+        String pathDataMatakuliah = "data/prasyarat.csv";
+        String pathDataPrasyarat = "data/prasyarat.csv";
+        sLinkedList <sTree> list = inisialisasi(pathDataMatakuliah, pathDataPrasyarat);
 
-        System.out.println(map.get("abc"));
-        System.out.println(map.get("cba"));
-
-        sLinkedList tes = map.makeValueList();
-        tes.print();
+        list.print();
     }
 
-    public void inisialisasi(sLinkedList list) throws Exception{
-        Matakuliah matakuliah [] = new Matakuliah[37];
-        sHashMap <String, sTree> map = new sHashMap<>();
-        
-        makeDatabase(matakuliah,"data/matakuliah.csv");
+    public static sLinkedList <sTree> inisialisasi(String pathMatakuliah, String pathPrasyarat) throws Exception{
+        sLinkedList <sTree> list = new sLinkedList<>();
+        sLinkedList <Prasyarat> listPraSyarat = Prasyarat.makePrasyarat(pathMatakuliah);
+        sHashMap <String, sTree> mapMataKuliah = Matakuliah.makeMataKuliah(pathPrasyarat);
 
-        for(Matakuliah m : matakuliah){
-            map.put(m.getKode(), new sTree(m));
-        }   
+        sLinkedList<Prasyarat>.Node  node = listPraSyarat.getHead();
+        while(node != null){
+            Prasyarat prasyarat = node.getData();
+            sTree root = mapMataKuliah.get(prasyarat.getPraSyarat());
+            sTree child = mapMataKuliah.get(prasyarat.getKodeMk());
+            root.add(child);
 
-
-    }
-
-    public void clean(sHashMap map){
-        
-    }
-
-    public static void makeDatabase(Object data [], String path) throws IOException{
-        Scanner scan = new Scanner(new File(path));
-        
-        int i = -1;
-        while(scan.hasNext()){
-            try{
-                if (data.getClass().getComponentType() == Matakuliah.class){
-                    data[i++] = new Matakuliah(scan.nextLine().split(";"));
-                }else{
-                    data[i++] = scan.nextLine();
-                }
-            }catch (Exception e){}
+            node = node.next;
         }
-        scan.close();
+
+        for(sLinkedList <sTree> l : mapMataKuliah.getList()){
+            Node n = l.getHead();
+            while(n != null){
+                Pair pair= (Pair)n.data;
+                // System.out.println(n);
+                // System.out.println(pair);
+                if (!((sTree)pair.getValue()).getIsRoot()){
+                    mapMataKuliah.remove((String)pair.getKey());
+                }
+                n = n.next;
+            }
+        }
+        
+        list = mapMataKuliah.makeValueList();
+        return list;
     }
 }

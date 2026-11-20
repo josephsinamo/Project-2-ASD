@@ -1,4 +1,9 @@
-import java.nio.channels.Pipe.SourceChannel;
+import java.util.*;
+
+import dsa.sHashMap;
+import dsa.sTree;
+
+import java.io.*;
 
 public class Matakuliah {
   private String kode;
@@ -23,6 +28,22 @@ public class Matakuliah {
     this.isGanjil = data[4].equalsIgnoreCase("Ganjil");
   }
 
+  public static sHashMap <String,sTree> makeMataKuliah(String path)throws IOException{
+    Scanner scan = new Scanner(new File(path));
+    sHashMap<String,sTree> map = new sHashMap<>();
+
+    if(scan.hasNextLine()){
+      scan.nextLine();
+    }
+
+    while(scan.hasNextLine()){
+      Matakuliah matkul = new Matakuliah(scan.nextLine().split(";"));
+      sTree tree = new sTree(matkul);
+      map.put(matkul.getKode(), tree);
+    }
+
+    return map;
+  }
 
   public String getKode () {
     return kode;
@@ -30,5 +51,10 @@ public class Matakuliah {
 
   public void cetak(){
     System.out.println("nama saya:"+nama+"   kode:"+kode);
+  }
+
+  @Override 
+  public String toString(){
+    return String.format("<Matkul.kode MK: %s>", kode);
   }
 }

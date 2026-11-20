@@ -1,23 +1,45 @@
 package dsa;
 
 public class sHashMap <K, V>{
-    public  class Pair <J , L>{
-        J key;
-        L value;
+    public  class Pair {
+        K key;
+        V value;
 
-        public Pair(J key, L value){
+        public Pair(K key, V value){
             this.key = key;
             this.value = value;
         }
+
+        public V getValue(){
+            return value;
+        }
+
+        public K getKey(){
+            return key;
+        }
+
+        @Override 
+        public String toString(){
+            return String.format("(key : %s   -- value : %s)",key,value);
+        }
     }
-    private int size = 15;
-    
-    private sLinkedList [] buckets = new sLinkedList[size];
+    private int size;
+    private sLinkedList [] buckets;
 
     public sHashMap(){
+        size = 15;
+        buckets = new sLinkedList[size];
         for(int i = 0; i < size; i++){
             buckets[i] = new sLinkedList();
         }
+    }
+
+    public int getInt(){
+        return size;
+    }
+
+    public sLinkedList [] getList(){
+        return buckets;
     }
 
     private int hashFunction(K k){
@@ -36,15 +58,15 @@ public class sHashMap <K, V>{
 
     public void put(K key){
         int index = hashFunction(key);
-        buckets[index].add(new Pair(key, key));
+        buckets[index].add(new Pair(key, (V)key));
     }
 
-    public Object get(K key){
+    public V get(K key){
         int index = hashFunction(key);
         sLinkedList.Node node = buckets[index].head;
         while (node != null){
             if(((Pair)(node.data)).key.equals(key)){
-                return ((Pair)(node.data)).value;
+                return ((Pair)(node.data)).getValue();
             }
             node = node.next;
         }
