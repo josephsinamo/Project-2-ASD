@@ -6,7 +6,7 @@ import dsa.sLinkedList.Node;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        String pathDataMatakuliah = "data/prasyarat.csv";
+        String pathDataMatakuliah = "data/matakuliah.csv";
         String pathDataPrasyarat = "data/prasyarat.csv";
         sLinkedList <sTree> list = inisialisasi(pathDataMatakuliah, pathDataPrasyarat);
 
@@ -15,8 +15,8 @@ public class Main {
 
     public static sLinkedList <sTree> inisialisasi(String pathMatakuliah, String pathPrasyarat) throws Exception{
         sLinkedList <sTree> list = new sLinkedList<>();
-        sLinkedList <Prasyarat> listPraSyarat = Prasyarat.makePrasyarat(pathMatakuliah);
-        sHashMap <String, sTree> mapMataKuliah = Matakuliah.makeMataKuliah(pathPrasyarat);
+        sHashMap <String, sTree> mapMataKuliah = Matakuliah.makeMataKuliah(pathMatakuliah);
+        sLinkedList <Prasyarat> listPraSyarat = Prasyarat.makePrasyarat(pathPrasyarat);
 
         sLinkedList<Prasyarat>.Node  node = listPraSyarat.getHead();
         while(node != null){

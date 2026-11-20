@@ -38,6 +38,7 @@ public class Matakuliah {
 
     while(scan.hasNextLine()){
       Matakuliah matkul = new Matakuliah(scan.nextLine().split(";"));
+      System.out.println("tes");
       sTree tree = new sTree(matkul);
       map.put(matkul.getKode(), tree);
     }
