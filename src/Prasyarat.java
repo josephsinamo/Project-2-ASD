@@ -16,7 +16,7 @@ public class Prasyarat {
         kodeMk = data[1];
     }
 
-    public static sLinkedList makePrasyarat(String path) throws IOException{
+    public static sLinkedList makePrasyarat(String path) throws FileNotFoundException{
         Scanner scan = new Scanner(new File(path));
         sLinkedList list = new sLinkedList<>();
 

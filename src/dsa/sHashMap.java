@@ -79,9 +79,22 @@ public class sHashMap <K, V>{
         while (node != null){
             if(((Pair)(node.data)).key.equals(key)){
                 buckets[index].remove(node);
+                return;
             }
             node = node.next;
         }
+    }
+
+    public boolean contain(K key){
+        int index = hashFunction(key);
+        sLinkedList.Node node = buckets[index].head;
+        while (node != null){
+            if(((Pair)(node.data)).key.equals(key)){
+                return true;
+            }
+            node = node.next;
+        }
+        return false;
     }
 
     public sLinkedList makeValueList(){

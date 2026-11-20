@@ -10,7 +10,40 @@ public class Main {
         String pathDataPrasyarat = "data/prasyarat.csv";
         sLinkedList <sTree> list = inisialisasi(pathDataMatakuliah, pathDataPrasyarat);
 
-        list.print();
+        Mahasiswa [] mhs = Mahasiswa.makeMhs("input");
+        for(Mahasiswa m: mhs){
+            sLinkedList <sTree>.Node node = list.getHead();
+            while (node != null) {
+                sTree tree = node.getData();
+                req(m, tree, true, new sLinkedList<Matakuliah>());
+                node = node.next;
+            }
+
+            m.printKRS();
+        }
+    }
+
+    public static void req(Mahasiswa mhs, sTree tree, boolean sParent, 
+        sLinkedList <Matakuliah> listBlmLulus)
+    {
+        Matakuliah bufMatkul = (Matakuliah)tree.getData(); 
+        
+        if (bufMatkul.canTake(mhs.getTgrSem()) && sParent){
+            //System.out.printf("nama Matkul: %s -- apa Lulus parent: %s -- lulus self: %s\n",bufMatkul,status,mhs.isLulus(bufMatkul.getKode()));
+            mhs.addMk(bufMatkul);
+        }else{
+            mhs.addBlmMk(bufMatkul, listBlmLulus);
+        }
+        
+        boolean status = mhs.isLulus(bufMatkul.getKode());
+        if (!status){
+            listBlmLulus.add(bufMatkul);
+        }
+        sLinkedList <sTree>.Node child = tree.getChild().getHead();
+        while (child != null){
+            req(mhs, child.getData(), status, listBlmLulus);
+            child = child.next;
+        }
     }
 
     public static sLinkedList <sTree> inisialisasi(String pathMatakuliah, String pathPrasyarat) throws Exception{
@@ -31,13 +64,15 @@ public class Main {
         for(sLinkedList <sTree> l : mapMataKuliah.getList()){
             Node n = l.getHead();
             while(n != null){
+                Node next = n.next;
                 Pair pair= (Pair)n.data;
                 // System.out.println(n);
-                // System.out.println(pair);
+                sTree tes = ((sTree)pair.getValue());
+                // System.out.println(tes.getData() +"  "+tes.getIsRoot());
                 if (!((sTree)pair.getValue()).getIsRoot()){
                     mapMataKuliah.remove((String)pair.getKey());
                 }
-                n = n.next;
+                n = next;
             }
         }
         

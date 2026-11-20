@@ -84,6 +84,7 @@ public class sLinkedList <T> {
                     head = curr.next;
                 }else if(curr == tail){
                     tail = prev;
+                    tail.next = null;
                 }else{
                     prev.next = curr.next;
                 }
@@ -91,5 +92,9 @@ public class sLinkedList <T> {
             prev = curr;
             curr = curr.next;
         }
+    }
+
+    public void removeTail(){
+        this.remove(tail);
     }
 }

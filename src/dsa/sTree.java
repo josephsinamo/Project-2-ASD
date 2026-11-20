@@ -3,11 +3,11 @@ package dsa;
 public class sTree {
     Object data;
     boolean isRoot = true;
-    sLinkedList childs;
+    sLinkedList <sTree> childs;
 
     public sTree(Object data){
         this.data = data;
-        childs = new sLinkedList();
+        childs = new sLinkedList<>();
     }
 
     public Object getData(){
@@ -21,6 +21,10 @@ public class sTree {
 
     public boolean getIsRoot(){
         return isRoot;
+    }
+
+    public sLinkedList<sTree> getChild(){
+        return  childs;
     }
 
     @Override 
