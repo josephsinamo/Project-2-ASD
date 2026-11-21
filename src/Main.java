@@ -10,19 +10,9 @@ public class Main {
     loadCourse("data/matakuliah.csv", graph);
     loadPrereq("data/prasyarat.csv", graph);
 
-    // LinkedList<Course> courses = graph.getAllCourse();
-    // courses.display();
-    // System.out.println("size = " + courses.getSize());
-
-    String nextSemester = "genap";
     HashMap<Boolean> lulus = new HashMap<>();
-    lulus.put("RPL", true);
-    lulus.put("PDAS", true);
-    lulus.put("PKK", true);
-    lulus.put("AOK", true);
-    lulus.put("KAL", true);
-    lulus.put("STP", true);
-    lulus.put("AGM", true);
+    String nextSemester = loadInput("input/mhs_01.txt", lulus);
+    System.out.println(nextSemester.getClass());
 
     LinkedList<Course> canBeTaken = new LinkedList<>();
     LinkedList<BlockedCourse> cantBeTaken = new LinkedList<>();
@@ -107,5 +97,26 @@ public class Main {
         graph.addPrereq(prereqCode, targetCode);
       }
     }
+  }
+
+  public static String loadInput(String path, HashMap <Boolean> lulus) throws IOException{
+    String semester = "";
+    try(BufferedReader br = new BufferedReader(new FileReader(path))){
+      semester = br.readLine().split("=")[1].trim();
+      
+      String line;
+      while((line = br.readLine()) != null){
+        if (line.trim().isEmpty()) {
+          continue;
+        }
+        String [] parts = line.split("=")[1].split(",");
+
+        for(String s : parts){
+          lulus.put(s,true);
+        }
+      }
+    }
+
+    return semester;
   }
 }
