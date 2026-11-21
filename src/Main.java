@@ -24,7 +24,7 @@ public class Main {
         continue;
       }
 
-      if (! c.periode.equalsIgnoreCase(nextSemester)) {
+      if (!c.periode.equalsIgnoreCase(nextSemester)) {
         continue;
       }
 
@@ -49,7 +49,8 @@ public class Main {
       BlockedCourse bc = node.data;
 
       System.out.print(bc.course + " Karena: ");
-
+      
+      //bisa di singkat
       for (Node<Course> nodeCourse = bc.missingPrereq.head; nodeCourse != null; nodeCourse = nodeCourse.next) {
         System.out.print(nodeCourse.data + " ");
       }
@@ -67,6 +68,7 @@ public class Main {
           continue;
         }
 
+        //saran penginputan dipersingkat
         String[] parts = line.split(";");
         String code = parts[0].trim();
         String name = parts[1].trim();
