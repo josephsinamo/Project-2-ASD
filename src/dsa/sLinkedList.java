@@ -105,18 +105,25 @@ public class sLinkedList <T> implements Iterable<T>{
     }
 
     public void remove(Node value){
+        if (head == null){
+            return;
+        }
         Node curr = head;
         Node prev = null;
         while (curr != null) {
             if (curr == value){
-                if(curr == head){
+                if (curr == head && curr == tail) {
+                    head = tail = null;
+                } else if (curr == head) {
                     head = curr.next;
-                }else if(curr == tail){
+                } else if (curr == tail) {
                     tail = prev;
                     tail.next = null;
-                }else{
+                } else {
                     prev.next = curr.next;
                 }
+                size--;
+                return;
             }
             prev = curr;
             curr = curr.next;

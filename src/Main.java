@@ -13,10 +13,13 @@ public class Main {
         Mahasiswa [] mhs = Mahasiswa.makeMhs("input");
         for(Mahasiswa m: mhs){
             sLinkedList <sTree>.Node node = list.getHead();
+
             boolean stat = true;
             while (node != null) {
+                
                 sTree tree = node.getData();
-                stat = stat && req(m, tree, true, new sLinkedList<Matakuliah>());
+                
+                stat = req(m, tree, true, new sLinkedList<Matakuliah>()) && stat;
                 node = node.next;
             }
 
@@ -33,6 +36,8 @@ public class Main {
     {
         Matakuliah bufMatkul = (Matakuliah)tree.getData();
         boolean wajib = true;
+
+        
         
         boolean canTakeMk = bufMatkul.canTake(mhs.getTgrSem());
         if (canTakeMk && sParent){
@@ -50,7 +55,7 @@ public class Main {
         }
         sLinkedList <sTree>.Node child = tree.getChild().getHead();
         while (child != null){
-            wajib = wajib && req(mhs, child.getData(), status, listBlmLulus);
+            wajib = req(mhs, child.getData(), status, listBlmLulus) && wajib  ;
             child = child.next;
         }
         
