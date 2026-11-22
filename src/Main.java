@@ -45,6 +45,14 @@ public class Main {
         continue;
       }
 
+      if (c.getCode().equalsIgnoreCase("SKR")) {
+        if (lulus.getSize() == graph.getTotalCourse()) {
+          canBeTaken.addLast(c);
+        } else {
+          cantBeTaken.addLast(new BlockedCourse(c, "Belum lulus semua MK wajib"));
+        }
+      }
+
       LinkedList<Course> missing = graph.getMissingPrerequisites(c, lulus);
       if (missing.isEmpty()) {
         canBeTaken.addLast(c);
