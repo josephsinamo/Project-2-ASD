@@ -65,5 +65,19 @@ public class LinkedList<T> {
 
     list.display();
   }
+
+  @Override 
+  public String toString(){
+    Node curr = head;
+    String s = "";
+
+    while(curr != null){
+      s += String.format("%s%s", curr.data,(curr != tail) ? "," : "");
+
+      curr = curr.next;
+    }
+
+    return s;
+  }
 }
 

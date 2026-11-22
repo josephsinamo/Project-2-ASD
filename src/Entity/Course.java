@@ -1,4 +1,6 @@
 package Entity;
+import java.util.InputMismatchException;
+
 import DataStructures.LinkedList;
 
 public class Course {
@@ -16,6 +18,13 @@ public class Course {
     this.semester = semester;
     this.periode = isGanjil;
     this.prereq = new LinkedList<>();
+  }
+
+  public Course(String [] input){
+    if (input.length != 5){
+      throw new InputMismatchException("Input tidak sesuai");
+    }
+    this(input[0].trim(),input[1],Integer.valueOf(input[2]),Integer.valueOf(input[3]),input[4].trim());
   }
 
   public String getCode () {

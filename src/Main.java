@@ -48,7 +48,7 @@ public class Main {
     for (Node<BlockedCourse> node = cantBeTaken.head; node != null; node = node.next) {
       BlockedCourse bc = node.data;
 
-      System.out.print(bc.course + " Karena: ");
+      System.out.printf("%s Karena: %s",bc.course,bc.missingPrereq);
       
       //bisa di singkat
       for (Node<Course> nodeCourse = bc.missingPrereq.head; nodeCourse != null; nodeCourse = nodeCourse.next) {
@@ -67,16 +67,7 @@ public class Main {
         if (line.trim().isEmpty()) {
           continue;
         }
-
-        //saran penginputan dipersingkat
-        String[] parts = line.split(";");
-        String code = parts[0].trim();
-        String name = parts[1].trim();
-        int sks = Integer.parseInt(parts[2].trim());
-        int semester = Integer.parseInt(parts[3].trim());
-        String periode = parts[4].trim();
-
-        Course course = new Course(code, name, sks, semester, periode);
+        Course course = new Course(line.split(";"));
         graph.addCourse(course);
       }
     }
