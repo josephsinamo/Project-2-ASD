@@ -37,6 +37,10 @@ public class Course {
 
   @Override 
   public String toString(){
-    return String.format("<Matkul.kode MK: %s>", code);
+    return String.format("%s", code);
+  }
+
+  public String getDetail(){
+    return String.format("%-5s %-40s %dsks", code,nama,sks);
   }
 }

@@ -12,7 +12,6 @@ public class Main {
 
     HashMap<Boolean> lulus = new HashMap<>();
     String nextSemester = loadInput("input/mhs_01.txt", lulus);
-    System.out.println(nextSemester.getClass());
 
     LinkedList<Course> canBeTaken = new LinkedList<>();
     LinkedList<BlockedCourse> cantBeTaken = new LinkedList<>();
@@ -36,10 +35,10 @@ public class Main {
       }
     }
 
-
+    int i = 1;
     System.out.println("Yang bisa diambil:");
     for (Node<Course> node = canBeTaken.head; node != null; node = node.next) {
-      System.out.println(node.data);
+      System.out.printf("%2d %s\n",i++,node.data.getDetail());
     }
 
     System.out.println("\n");
@@ -49,13 +48,12 @@ public class Main {
       BlockedCourse bc = node.data;
 
       System.out.printf("%s Karena: %s",bc.course,bc.missingPrereq);
-      
-      //bisa di singkat
-      for (Node<Course> nodeCourse = bc.missingPrereq.head; nodeCourse != null; nodeCourse = nodeCourse.next) {
-        System.out.print(nodeCourse.data + " ");
-      }
       System.out.println();
     }
+  }
+
+  public static void printMhs(Graph graph, HashMap<Boolean> lulus, String nextSemester){
+
   }
 
   private static void loadCourse (String path, Graph graph) throws IOException {
