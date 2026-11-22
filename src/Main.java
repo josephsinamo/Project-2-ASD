@@ -34,8 +34,8 @@ public class Main {
     LinkedList<Course> canBeTaken = new LinkedList<>();
     LinkedList<BlockedCourse> cantBeTaken = new LinkedList<>();
 
-    for (Node<Course> node =  graph.getAllCourse().head; node != null; node = node.next) {
-      Course c = node.data;
+    for (Node<Course> node =  graph.getAllCourse().getHead(); node != null; node = node.getNext()) {
+      Course c = node.getData();
 
       if (lulus.contains(c.getCode())) {
         continue;
@@ -63,15 +63,15 @@ public class Main {
 
     int i = 1;
     System.out.println("Yang bisa diambil:");
-    for (Node<Course> node = canBeTaken.head; node != null; node = node.next) {
-      System.out.printf("%2d %s\n",i++,node.data.getDetail());
+    for (Node<Course> node = canBeTaken.getHead(); node != null; node = node.getNext()) {
+      System.out.printf("%2d %s\n",i++,node.getData().getDetail());
     }
 
     System.out.println("");
     
     System.out.println("Yang tidak bisa diambil:");
-    for (Node<BlockedCourse> node = cantBeTaken.head; node != null; node = node.next) {
-      BlockedCourse bc = node.data;
+    for (Node<BlockedCourse> node = cantBeTaken.getHead(); node != null; node = node.getNext()) {
+      BlockedCourse bc = node.getData();
 
       System.out.printf("%s Karena: %s",bc.course,bc.missingPrereq);
       System.out.println();

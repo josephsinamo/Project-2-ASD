@@ -42,8 +42,8 @@ public class Graph {
   }
 
   private void dfs (Course curr, HashMap<Boolean> passed, HashMap<Course> visited, LinkedList<Course> missing) {
-    for (Node<Course> node = curr.prereq.head; node != null; node = node.next) {
-      Course prereq = node.data;
+    for (Node<Course> node = curr.prereq.getHead(); node != null; node = node.getNext()) {
+      Course prereq = node.getData();
 
       if (visited.contains(prereq.getCode())) {
         continue;

@@ -1,12 +1,16 @@
 package DataStructures;
 
 public class LinkedList<T> {
-  public Node<T> head, tail;
+  private Node<T> head, tail;
   private int size;
 
   public LinkedList () {
     this.head = this.tail = null;
     this.size = 0;
+  }
+
+  public Node<T> getHead () {
+    return head;
   }
 
   public boolean isEmpty () {
@@ -23,7 +27,7 @@ public class LinkedList<T> {
     if (isEmpty()) {
       head = tail = node;
     } else {
-      tail.next = node;
+      tail.setNext(node);
       tail = node;
     }
 
