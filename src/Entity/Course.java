@@ -41,6 +41,6 @@ public class Course {
   }
 
   public String getDetail(){
-    return String.format("%-5s %-50s %dsks", code,nama,sks);
+    return String.format("%-5s %-50s %d sks", code,nama,sks);
   }
 }
