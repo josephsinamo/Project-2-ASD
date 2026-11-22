@@ -21,6 +21,7 @@ public class HashMap<T> {
     this(79);
   }
 
+  @SuppressWarnings("unchecked")
   public HashMap (int capacity) {
     this.capacity = capacity;
     this.buckets = (Entry<T>[]) new Entry[capacity];
