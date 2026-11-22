@@ -78,13 +78,13 @@ public class Main {
     for (Node<BlockedCourse> node = cantBeTaken.getHead(); node != null; node = node.getNext()) {
       BlockedCourse bc = node.getData();
 
-      if (bc.missingPrereq == null) {
+      if (bc.missingPrereqIsNull()) {
         // Case 1: Special reason (e.g., SKR)
-        System.out.printf("%-6s %s\n", bc.course.getCode() + ":", bc.specialReason);
+        System.out.printf("%-6s %s\n", bc.getCourse().getCode() + ":", bc.getSpecialReason());
       } else {
         // Case 2: Missing prerequisites linked list
-        System.out.printf("%-6s belum lulus ", bc.course.getCode() + ":");
-        for (Node<Course> mNode = bc.missingPrereq.getHead(); mNode != null; mNode = mNode.getNext()) {
+        System.out.printf("%-6s belum lulus ", bc.getCourse().getCode() + ":");
+        for (Node<Course> mNode = bc.getMissingPrereq().getHead(); mNode != null; mNode = mNode.getNext()) {
           System.out.print(mNode.getData().getCode());
           if (mNode.getNext() != null) {
             System.out.print(", ");
