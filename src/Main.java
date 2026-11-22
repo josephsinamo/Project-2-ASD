@@ -4,15 +4,33 @@ import Entity.*;
 import java.io.*;
 
 public class Main {
-  public static void main (String args[]) throws IOException {
-    Graph graph = new Graph();
+    public static void main (String args[]) throws IOException {
+        Graph graph = new Graph();
     
-    loadCourse("data/matakuliah.csv", graph);
-    loadPrereq("data/prasyarat.csv", graph);
+        loadCourse("data/matakuliah.csv", graph);
+        loadPrereq("data/prasyarat.csv", graph);
 
-    HashMap<Boolean> lulus = new HashMap<>();
-    String nextSemester = loadInput("input/mhs_01.txt", lulus);
+        File [] dirInput = new File("input").listFiles();
+        
+        for(File input : dirInput){
+            pBorder(60);
+            System.out.printf("Nama mhs : %s\n",input.getName());
 
+            HashMap<Boolean> lulus = new HashMap<>();
+            String nextSemester = loadInput(input.getPath(), lulus);
+
+            printMhs(graph, lulus, nextSemester);
+            pBorder(60);
+        }
+    
+    }
+
+    private static void pBorder(int pjg) {
+        if (pjg <= 0) return;
+        System.out.println(String.format("%" + pjg + "s", "").replace(' ', '='));  
+    }
+
+  public static void printMhs(Graph graph, HashMap<Boolean> lulus, String nextSemester){
     LinkedList<Course> canBeTaken = new LinkedList<>();
     LinkedList<BlockedCourse> cantBeTaken = new LinkedList<>();
 
@@ -41,7 +59,7 @@ public class Main {
       System.out.printf("%2d %s\n",i++,node.data.getDetail());
     }
 
-    System.out.println("\n");
+    System.out.println("");
     
     System.out.println("Yang tidak bisa diambil:");
     for (Node<BlockedCourse> node = cantBeTaken.head; node != null; node = node.next) {
@@ -50,10 +68,6 @@ public class Main {
       System.out.printf("%s Karena: %s",bc.course,bc.missingPrereq);
       System.out.println();
     }
-  }
-
-  public static void printMhs(Graph graph, HashMap<Boolean> lulus, String nextSemester){
-
   }
 
   private static void loadCourse (String path, Graph graph) throws IOException {
