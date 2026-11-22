@@ -10,6 +10,10 @@ public class Graph {
     courseMap = new HashMap<>();
   }
 
+  public int getTotalCourse () {
+    return courses.getSize();
+  }
+
   public void addCourse (Course course) {
     courses.addLast(course);
     courseMap.put(course.getCode(), course);
