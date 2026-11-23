@@ -1,4 +1,3 @@
-.
 ├── data/
 │   ├── matakuliah.csv      # kode;nama;sks;semester;ganjil/genap
 │   └── prasyarat.csv       # prasyarat;matakuliah
