@@ -79,10 +79,8 @@ public class Main {
       BlockedCourse bc = node.getData();
 
       if (bc.missingPrereqIsNull()) {
-        // Case 1: Special reason (e.g., SKR)
         System.out.printf("%-6s %s\n", bc.getCourse().getCode() + ":", bc.getSpecialReason());
       } else {
-        // Case 2: Missing prerequisites linked list
         System.out.printf("%-6s belum lulus ", bc.getCourse().getCode() + ":");
         for (Node<Course> mNode = bc.getMissingPrereq().getHead(); mNode != null; mNode = mNode.getNext()) {
           System.out.print(mNode.getData().getCode());
@@ -148,7 +146,7 @@ public class Main {
 
         String[] kv = line.split("=", 2);
         if (kv.length < 2 || kv[1].trim().isEmpty()) {
-          continue; // Handles empty "lulus=" safely
+          continue;
         }
 
         String[] parts = kv[1].split(",");
